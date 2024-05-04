@@ -30,7 +30,8 @@ while True:
             print('Operação falhou! Valor informado é inválido.')
 
     elif opcao == 's':
-        '''Avalia o número de saques
+        '''Forma que fiz o código
+        Avalia o número de saques
         if numero_saques < LIMITE_SAQUES:
             valor = float(input('Valor que deseja sacar: R$ '))
             # Avalia se o valor é maior que o limite
