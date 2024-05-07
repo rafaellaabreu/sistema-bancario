@@ -79,4 +79,3 @@ O usuário pode ter mais de uma conta, mas uma conta pertence a somente um usuá
 
 * **Funçao listar usuários**
 
-* **Funçao inativar conta**
