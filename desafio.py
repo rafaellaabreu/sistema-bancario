@@ -23,14 +23,14 @@ def menu():
     menu = """    
     Menu de Opções
     --------------
-    [1] Depósito
-    [2] Sacar
-    [3] Extrato
-    [4] Criar Usuário
-    [5] Listar usuários
-    [6] Criar Conta
-    [7] Listar contas  
-    [8] sair
+    [d]  Depósito
+    [s]  Sacar
+    [e]  Extrato
+    [u]  Criar Usuário
+    [lu] Listar usuários
+    [c]  Criar Conta
+    [lc] Listar contas  
+    [q]  Sair
     
     """
 
@@ -49,25 +49,24 @@ def depositar(saldo, valor, extrato, /, cor=0):
     return saldo, extrato
 
 
-def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques, cor=0):
-    excedeu_saldo = valor > saldo
-    excedeu_limite = valor > limite
-    excedeu_saques = numero_saques >= limite_saques
-
-    if excedeu_saldo:
-        print(c[1],'\n\tOperação falhou! Saldo insuficiente!\n', c[0])
-    elif excedeu_limite:
-        print(c[1],'\nOperação falhou! Limite máximo de R$ 500,00 por saque.\n', c[0])
-    elif excedeu_saques:
-        print(c[1],'\nOperação falhou! Limite de saque diário excedido.\n', c[0])
-    elif valor > 0:
-        saldo -= valor
-        numero_saques += 1
-        extrato += f'Saque:\t\tR$ {valor:.2f}\n'
-        print(c[2],'\n\tSaque realizado com sucesso!\n', c[0])
+def sacar(*, saldo, valor, extrato, limite, numero_saques, LIMITE_SAQUES, cor=0):
+    if numero_saques < LIMITE_SAQUES:
+        if valor < saldo:
+            if valor <= limite:
+                if valor > 0:
+                    saldo -= valor
+                    numero_saques += 1
+                    extrato += f'Saque:\t\tR$ {valor:.2f}\n'
+                    print(c[2],'\n\tSaque realizado com sucesso!\n', c[0])
+                else:
+                    print(c[1],'\nOperação falhou! O valor informado é inválido.\n', c[0])
+            else:
+                print(c[1],'\nOperação falhou! Limite máximo de R$ 500,00 por saque.\n', c[0])
+        else:
+            print(c[1],'\n\tOperação falhou! Saldo insuficiente!\n', c[0])
     else:
-        print(c[1],'\nOperação falhou! O valor informado é inválido.\n', c[0])
-
+        print(c[1],'\nOperação falhou! Limite de saque diário excedido.\n', c[0])
+    
     sleep(1.5)
     os. system('cls')
     return saldo, extrato
@@ -88,6 +87,7 @@ def exibir_extrato(saldo, /, *, extrato, cor=0):
 def criar_usuario(usuarios):
     cpf = str(input('Informe o CPF [somente números]: ')).strip()
     usuario = filtrar_usuario(cpf, usuarios)
+
     if usuario:
         print(c[1],'\n\nJá existe usuário com esse CPF.\n', c[0])
         return 
@@ -105,17 +105,17 @@ def criar_usuario(usuarios):
     os. system('cls')
 
 
+def filtrar_usuario(cpf, usuarios):
+    filtro = [usuario for usuario in usuarios if usuario['cpf'] == cpf]
+    return filtro[0] if filtro else None
+
+
 def listar_usuarios(usuarios):
     for usuario in usuarios:
         print(f'CPF:                {usuario['cpf']}\nNome:               {usuario['nome']}\nData de Nascimento: {usuario['data']}\nEndereço:           {usuario['end']}')
         print(c[4],'-='*30)
         print(c[0])
     
-
-def filtrar_usuario(cpf, usuarios):
-    filtro = [usuario for usuario in usuarios if usuario['cpf'] == cpf]
-    return filtro[0] if filtro else None
-
 
 def criar_contas(agencia, contador_conta, usuarios):
     cpf = str(input('Informe o CPF [somente números]: ')).strip()
@@ -153,31 +153,31 @@ def main():
         opcao = menu()
 
         # Função depositar
-        if opcao == '1':
+        if opcao == 'd':
             valor = float(input('Valor do depósito: R$ '))
             # Argumentos por posição
             saldo, extrato = depositar(saldo, valor, extrato)
             
         # Função sacar
-        elif opcao == '2':
+        elif opcao == 's':
             valor = float(input('Valor que deseja sacar: R$ '))
             # Argumentos por nome
             saldo, extrato = sacar(saldo=saldo, valor=valor, extrato=extrato, limite=limite, numero_saques=numero_saques, limite_saques=LIMITE_SAQUES)
         
         # Função extrato
-        elif opcao == '3':
+        elif opcao == 'e':
             exibir_extrato(saldo, extrato=extrato)
         
         # Função criar usuario
-        elif opcao == '4':
+        elif opcao == 'u':
             criar_usuario(usuarios)
 
         # Função listar usuários
-        elif opcao == '5':
+        elif opcao == 'lc':
             listar_usuarios(usuarios)
 
         # Função criar conta
-        elif opcao == '6':
+        elif opcao == 'c':
             #contador_conta = len(contas) + 1
             conta = criar_contas(AGENCIA, contador_conta, usuarios)
 
@@ -186,11 +186,11 @@ def main():
                 contador_conta += 1
 
         # Funçao listar contas
-        elif opcao == '7':
+        elif opcao == 'lc':
             listar_contas(contas)
 
         # Opção SAIR
-        elif opcao == '9':
+        elif opcao == 'q':
             break
          
         # Caso a opção seja inválida   
