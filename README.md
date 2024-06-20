@@ -79,3 +79,16 @@ O usuário pode ter mais de uma conta, mas uma conta pertence a somente um usuá
 
 * **Funçao listar usuários**
 
+#### Funcionalidades 3:
+
+##### Objetivo Geral:
+
+Iniciar a modelagem do sistema bancário em POO. Adicionar classes para cliente e as operações bancárias: depósito e saque.
+
+Atualizar a implementação do sistema bancário, para armazenar os dados de clientes e contas bancárias em objetos ao invés de dicionários. O código deve seguir o modelo de classes UML a seguir:
+
+![alt text](image.png)
+
+**Extra**
+
+Após concluir a modelagem das classes e a criação dos métodos. Atualizar os métodos que tratam as opções do menu, para funcionarem com as classes modeladas.
