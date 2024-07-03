@@ -3,6 +3,9 @@ import os
 from time import sleep
 from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
+from pathlib import Path
+
+ROOT_PATH = Path(__file__).parent
 
 # cores
 c = ('\033[m',       #0 - sem cor
@@ -42,9 +45,6 @@ class Cliente:
         self.contas = []
         self.indice_conta = 0
 
-    # def realizar_transacao(self, conta, transacao):
-    #     transacao.registrar(conta)
-
     def realizar_transacao(self, conta, transacao):
         if len(conta.historico.transacoes_do_dia()) >= 2:
             print(c[1],'\n\tLimite de transações diária escedida!\n', c[0])
@@ -71,6 +71,9 @@ class PessoaFisica(Cliente):
     #         Data de Nascimento:\t\t{self.data_nascimento}
     #         Endereço:\t\t{self.endereco}
     #     """
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}: ('{self.nome}','{self.cpf}'')>"
 
 class Conta:
     def __init__(self, numero, cliente):
@@ -166,6 +169,9 @@ class ContaCorrente(Conta):
         os. system('cls')
         return False
 
+    def __repr__(self):
+        return f"<{self.__class__.__name__}: ('{self.agencia}', '{self.numero}', '{self.cliente.nome}')>"
+
     def __str__(self):
         return f"""\
             Agência:\t{self.agencia}
@@ -249,7 +255,12 @@ class Deposito(Transacao):
 def log_transacao(func):
     def envelope(*args, **kwargs):
         resultado = func(*args, **kwargs)
-        print(f"{datetime.now()}: {func.__name__.upper()}")
+        data_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        with open(ROOT_PATH / 'log.txt', 'a') as arquivo:
+            arquivo.write(
+                f'[{data_hora}] Função "{func.__name__}" executada com argumentos {args} e {kwargs}. Retornou {resultado}\n'
+            )
         return resultado
 
     return envelope

@@ -113,3 +113,20 @@ Criar um gerador que permita iterar sobre as transações de uma conta e retorne
 * **Iterador Personalizado**
 
 Implementar um interador personalizado ContaIterador que permita iterar sobre todas as contas do banco, retornando informações básicas de cada conta (número, saldo atual, etc)
+
+#### Funcionalidades 5:
+
+##### Objetivo Geral:
+
+Modificar o atual decorador do log, que imprime informações no console, para que ele salve essas informações em um arquivo de log, possibilitando uma revisão mais fácil e uma análise mais detalhada das operações dos usuários.
+
+* **Requisitos**
+
+O decorador deve registrar o seguinte para cada chamada de função:
+- Data e horas atuais
+- Nome da função
+- Argumentos da função
+- Valor retornado pela função
+- O arquivo de log deve ser chamado log.txt
+- Se o arquivo log.txt já existir, os novos devem ser adicionados ao final do arquivo
+- Cada entrada de log deve estar em uma nova linha
